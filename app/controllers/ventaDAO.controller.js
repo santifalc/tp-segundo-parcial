@@ -9,7 +9,7 @@ exports.create = (req, res) => {
         });
         return;
     }
-// crea una venta
+// crea una venta 
     const venta = {
         cliente: req.body.cliente,
         factura: req.body.factura,

@@ -15,5 +15,6 @@ module.exports = (sequelize, Sequelize) => {
             autoIncrement: true
         }
     });
+
     return Venta;
 };
