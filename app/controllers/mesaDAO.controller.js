@@ -66,7 +66,6 @@ exports.update = (req, res) => {
     });
 };
 
-// Delete a Mesa by ID
 exports.eliminar = (req, res) => {
   // Validate request
   if (!req.params.id) {
@@ -97,3 +96,29 @@ exports.eliminar = (req, res) => {
       });
     });
 };
+
+exports.findOne = (req, res) => {
+  //Validate request
+  if (!req.params.id) {
+    res.status(400).send({
+      message: "Debe seleccionar una mesa!",
+    });
+    return;
+  }
+
+  const id = req.params.id;
+
+  mesas
+    .findOne({ where: { id } })
+    .then((data) => {
+      if (data) res.send(data);
+      else throw err;
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Error al obtener mesa con id=" + id,
+      });
+    });
+};
+
+exports.findAllByRestaurant = (req, res) => {};
