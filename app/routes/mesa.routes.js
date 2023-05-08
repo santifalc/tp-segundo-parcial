@@ -4,7 +4,7 @@ module.exports = (app) => {
   router.post("/", mesa.create);
   router.put("/:id", mesa.update);
   router.delete("/:id", mesa.eliminar);
-  //router.get("/", mesa.findAll);
+  router.get("/restaurante/:restauranteId", mesa.findAllByRestaurant);
   router.get("/:id", mesa.findOne);
   app.use("/api/mesa", router);
 };
