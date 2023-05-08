@@ -65,3 +65,35 @@ exports.update = (req, res) => {
       });
     });
 };
+
+// Delete a Mesa by ID
+exports.eliminar = (req, res) => {
+  // Validate request
+  if (!req.params.id) {
+    res.status(400).send({
+      message: "Debe seleccionar una mesa!",
+    });
+    return;
+  }
+
+  const id = req.params.id;
+
+  mesas
+    .destroy({ where: { id } })
+    .then((numRowsAffected) => {
+      if (numRowsAffected == 1) {
+        res.send({
+          message: "Mesa eliminada correctamente.",
+        });
+      } else {
+        res.status(404).send({
+          message: `No se pudo eliminar la mesa con id=${id}.`,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: `Error al eliminar la mesa con id=${id}.`,
+      });
+    });
+};
