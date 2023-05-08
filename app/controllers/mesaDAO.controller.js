@@ -121,4 +121,31 @@ exports.findOne = (req, res) => {
     });
 };
 
-exports.findAllByRestaurant = (req, res) => {};
+exports.findAllByRestaurant = (req, res) => {
+  //Validate request
+  if (!req.params.restauranteId) {
+    res.status(400).send({
+      message: "Debe seleccionar un restaurante!",
+    });
+    return;
+  }
+
+  const restauranteId = req.params.restauranteId;
+
+  mesas
+    .findAll({ where: { restauranteId } })
+    .then((data) => {
+      if (data) send(data);
+      else {
+        res.status(404).send({
+          message: "No se ha encontrado mesas",
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          "Error al obtener mesas del restaurante con id=" + restauranteId,
+      });
+    });
+};
