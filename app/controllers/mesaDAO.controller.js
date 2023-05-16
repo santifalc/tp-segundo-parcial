@@ -122,7 +122,7 @@ exports.findOne = (req, res) => {
 };
 
 exports.findAllByRestaurant = (req, res) => {
-  //Validate request
+  // Validate request
   if (!req.params.restauranteId) {
     res.status(400).send({
       message: "Debe seleccionar un restaurante!",
@@ -135,17 +135,21 @@ exports.findAllByRestaurant = (req, res) => {
   mesas
     .findAll({ where: { restauranteId } })
     .then((data) => {
-      if (data) send(data);
-      else {
+      if (data.length > 0) {
+        res.send(data);
+      } else {
         res.status(404).send({
-          message: "No se ha encontrado mesas",
+          message:
+            "No se han encontrado mesas para el restaurante con ID " +
+            restauranteId,
         });
       }
     })
     .catch((err) => {
       res.status(500).send({
         message:
-          "Error al obtener mesas del restaurante con id=" + restauranteId,
+          "Error al obtener mesas del restaurante con ID " + restauranteId,
+        error: err.message,
       });
     });
 };
