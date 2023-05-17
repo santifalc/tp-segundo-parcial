@@ -30,25 +30,30 @@ db.restaurante.hasMany(db.mesa, { as: "mesas" });
 db.cliente.hasOne(db.reserva, { as: "cliente" });
 db.restaurante.hasOne(db.reserva, { as: "restaurante" });
 db.mesa.hasMany(db.reserva, { as: "mesas" });
-// db.mesa.hasOne(db.posicion, { as: 'posicion' });
+db.posicion.hasOne(db.mesa, { as: "posicion" });
 
 //Se agregan las claves foráneas a las tablas (no hace falta xd)
-db.mesa.belongsTo(db.restaurante, {
-  foreignKey: "restauranteId",
-  as: "restauranteAssociation",
-});
-// db.posicion.belongsTo(db.mesa, { foreignKey: 'idPosicion', as: 'idPosicion' });
+// db.mesa.belongsTo(db.restaurante, {
+//   foreignKey: "restauranteId",
+//   as: "restauranteAssociation",
+// });
+// db.posicion.belongsTo(db.mesa, {
+//   foreignKey: "posicionId",
+//   as: "posicionAsociacion",
+// });
 
 // db.reserva.belongsTo(db.restaurante, { foreignKey: 'restauranteId', as: 'idRestaurante' });
 // db.reserva.belongsTo(db.mesa, { foreignKey: 'idMesa', as: 'idMesa' });
 // db.reserva.belongsTo(db.cliente, { foreignKey: 'idCliente', as: 'idCliente' });
-module.exports = db;
 
 // Cuando se agrega una clave foranea se debe descomentar el código de abajo
 // y ejecutar el node server.js
-
-// sequelize.sync({ force: true }).then(() => {
+module.exports = db;
+// sequelize
+//   .sync({ force: true })
+//   .then(() => {
 //     console.log("Tablas sincronizadas.");
-// }).catch(err => {
+//   })
+//   .catch((err) => {
 //     console.log("Error al sincronizar tablas:", err);
-// });
+//   });
