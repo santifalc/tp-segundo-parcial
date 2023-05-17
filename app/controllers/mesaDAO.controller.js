@@ -10,23 +10,32 @@ exports.create = (req, res) => {
     return;
   }
 
+  const { nombre, planta, capacidad, restauranteId, x, y } = req.body;
+
   const request = {
-    nombre: req.body.nombre,
-    planta: req.body.planta,
-    capacidad: req.body.capacidad,
-    restauranteId: req.body.restauranteId,
+    nombre,
+    planta,
+    capacidad,
+    restauranteId,
   };
-  // Guardamos a la base de datos
-  mesas
-    .create(request)
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Ha ocurrido un error al crear una mesa.",
+  const posicionRequest = {
+    x,
+    y,
+  };
+  db.posicion.create(posicionRequest).then((posicion) => {
+    request.posicionId = posicion.id;
+
+    mesas
+      .create(request)
+      .then((data) => {
+        res.send(data);
+      })
+      .catch((err) => {
+        res.status(500).send({
+          message: err.message || "Ha ocurrido un error al crear una mesa.",
+        });
       });
-    });
+  });
 };
 
 exports.update = (req, res) => {
@@ -44,6 +53,8 @@ exports.update = (req, res) => {
     planta: req.body.planta,
     capacidad: req.body.capacidad,
     restauranteId: req.body.restauranteId,
+    positionX: req.body.x,
+    positionY: req.body.y,
   };
 
   mesas
