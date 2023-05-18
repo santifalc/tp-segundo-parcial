@@ -11,25 +11,42 @@ exports.create = (req, res) => {
     return;
   }
 
-  const request = {
-    restauranteId: req.body.restauranteId,
-    mesaId: req.body.mesaId,
-    clienteCedula: req.body.clienteCedula,
-    fecha: req.body.fecha,
-    rangoHora: req.body.rangoHora,
-    cantidadSolicitada: req.body.cantidadSolicitada,
-  };
-  // Guardamos a la base de datos
-  reservas
-    .create(request)
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Ha ocurrido un error al crear una venta.",
+  const {
+    restauranteId,
+    mesaId,
+    clienteCedula,
+    fecha,
+    rangoHora,
+    cantidadSolicitada,
+    x,
+    y
+  } = req.body;
+
+  // Iterar sobre los rangos de hora y guardamos en la bd como registros distintos
+  Promise.all(
+      rangoHora.map(rango => {
+        const request = {
+          restauranteId,
+          mesaId,
+          clienteCedula,
+          fecha,
+          rangoHora: rango,
+          cantidadSolicitada,
+          x,
+          y
+        };
+        return reservas.create(request);
+      })
+  )
+      .then(data => {
+        res.send(data);
+      })
+      .catch(err => {
+        res.status(500).send({
+          message:
+              err.message || "Ha ocurrido un error al crear una reserva."
+        });
       });
-    });
 };
 
 exports.findAll = (req, res) => {
@@ -151,35 +168,6 @@ exports.findAllByCliente = (req, res) => {
         message:
           "Error al obtener reservas del cliente con CI " + clienteCedula,
         error: err.message,
-      });
-    });
-};
-exports.create = (req, res) => {
-  // Validate request
-  if (!req.body.clienteId) {
-    res.status(400).send({
-      message: "Debe enviar el nombre del restaurante!",
-    });
-    return;
-  }
-
-  const request = {
-    restauranteId: req.body.restauranteId,
-    mesaId: req.body.mesaId,
-    clienteId: req.body.clienteId,
-    fecha: req.body.fecha,
-    rangoHora: req.body.rangoHora,
-    cantidadSolicitada: req.body.cantidadSolicitada,
-  };
-
-  reservas
-    .create(request)
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Ha ocurrido un error al crear una venta.",
       });
     });
 };
