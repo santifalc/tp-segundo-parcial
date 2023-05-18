@@ -111,3 +111,37 @@ exports.findAllByFecha = (req, res) => {
             });
         });
 };
+
+exports.findAllByCliente = (req, res) => {
+    if (!req.body.clienteCedula) {
+        res.status(400).send({
+            message: "Debe seleccionar una fecha!",
+        });
+        return;
+    }
+
+    const clienteCedula = req.body.clienteCedula;
+
+    reservas
+        .findAll({where: {clienteCedula},
+            order: [['clienteCedula', 'ASC'], ['mesaId', 'ASC']]
+        })
+        .then((data) => {
+            if (data.length > 0) {
+                res.send(data);
+            } else {
+                res.status(404).send({
+                    message:
+                        "No se han encontrado reservas del cliente con CI " +
+                        clienteCedula,
+                });
+            }
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message:
+                    "Error al obtener reservas del cliente con CI " + clienteCedula,
+                error: err.message,
+            });
+        });
+};

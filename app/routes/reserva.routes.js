@@ -6,6 +6,7 @@ module.exports = app => {
     router.get("/", reserva.findAll);
     router.post("/filtro-restaurante", reserva.findAllByRestaurante);
     router.post("/filtro-fecha", reserva.findAllByFecha);
+    router.post("/filtro-cliente", reserva.findAllByCliente);
     // router.get("/:id", mesa.findOne);
     app.use('/api/reserva', router);
 };
