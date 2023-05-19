@@ -12,9 +12,11 @@ exports.create = (req, res) => {
     }
 
     const clienteCedula = req.body.clienteCedula;
+    const fecha = req.body.fecha;
     reservas
         .findAll({
-            where: {clienteCedula}
+            where: {clienteCedula,
+            fecha}
         })
         .then((data) => {
             if (data.length > 0) {
