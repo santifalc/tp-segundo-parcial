@@ -5,7 +5,7 @@ exports.create = (req, res) => {
 // Validate request
     if (!req.body.cedula) {
         res.status(400).send({
-            message: "Debe enviar el nombre de la mesa!"
+            message: "Debe enviar el nombre del cliente!"
         });
         return;
     }
@@ -23,7 +23,20 @@ exports.create = (req, res) => {
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Ha ocurrido un error al crear una venta."
+                    err.message || "Ha ocurrido un error al crear un cliente."
+            });
+        });
+};
+
+exports.findAll = (req, res) => {
+    clientes.findAll()
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "Ocurrio un error al obtener los clientes."
             });
         });
 };
