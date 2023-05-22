@@ -1,5 +1,6 @@
 const db = require("../models");
 const mesas = db.mesa;
+const sequelize = db.sequelize;
 const Op = db.Sequelize.Op;
 exports.create = (req, res) => {
   // Validate request
@@ -143,8 +144,27 @@ exports.findAllByRestaurant = (req, res) => {
 
   const restauranteId = req.params.restauranteId;
 
-  mesas
-    .findAll({ where: { restauranteId } })
+  mesas;
+  sequelize
+    .query(
+      `
+          SELECT "mesa"."id", "mesa"."nombre",
+          "mesa"."planta",
+          "mesa"."capacidad",
+          "mesa"."createdAt",
+          "mesa"."updatedAt",
+          "mesa"."restauranteId",
+          "mesa"."posicionId",
+          "posicion"."x", "posicion"."y"
+          FROM "mesas" AS "mesa"
+                   JOIN "posicion_mesas" AS "posicion" ON "mesa"."posicionId" = "posicion"."id"
+          WHERE "mesa"."restauranteId" = :restauranteId
+      `,
+      {
+        replacements: { restauranteId },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    )
     .then((data) => {
       if (data.length > 0) {
         res.send(data);
