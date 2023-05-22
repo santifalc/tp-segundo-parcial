@@ -4,9 +4,9 @@ const Op = db.Sequelize.Op;
 const sequelize = db.sequelize;
 exports.create = (req, res) => {
     // Validate request
-    if (!req.body.clienteCedula) {
+    if (!req.body.clienteCedula || !req.body.fecha || !req.body.restauranteId || !req.body.rangoHora ) {
         res.status(400).send({
-            message: "Debe enviar el nombre del restaurante!",
+            message: "Debe completar todos los datos!",
         });
         return;
     }

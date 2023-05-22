@@ -3,9 +3,9 @@ const clientes = db.cliente;
 const Op = db.Sequelize.Op;
 exports.create = (req, res) => {
 // Validate request
-    if (!req.body.cedula) {
+    if (!req.body.cedula || !req.body.nombre || !req.body.apellido) {
         res.status(400).send({
-            message: "Debe enviar el nombre del cliente!"
+            message: "Debe completar todos los datos!"
         });
         return;
     }

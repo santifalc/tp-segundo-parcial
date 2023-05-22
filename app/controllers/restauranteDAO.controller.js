@@ -5,9 +5,9 @@ const restaurantes = db.restaurante;
 const Op = db.Sequelize.Op;
 exports.create = (req, res) => {
 // Validate request
-    if (!req.body.nombre) {
+    if (!req.body.nombre || !req.body.direccion) {
         res.status(400).send({
-            message: "Debe enviar el nombre del restaurante!"
+            message: "Debe completar todos los datos!"
         });
         return;
     }
