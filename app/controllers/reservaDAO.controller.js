@@ -135,7 +135,7 @@ exports.findAllByFecha = (req, res) => {
             if (data.length > 0) {
                 res.send(data);
             } else {
-                res.status(404).send({
+                res.status(200).send({
                     message: "No se han encontrado reservas con fecha " + fecha,
                 });
             }
