@@ -30,9 +30,7 @@ exports.create = (req, res) => {
                     mesaId,
                     fecha,
                     rangoHora,
-                    cantidadSolicitada,
-                    x,
-                    y
+                    cantidadSolicitada
                 } = req.body;
 
                 // Iterar sobre los rangos de hora y guardamos en la bd como registros distintos
@@ -44,9 +42,7 @@ exports.create = (req, res) => {
                             clienteCedula,
                             fecha,
                             rangoHora: rango,
-                            cantidadSolicitada,
-                            x,
-                            y
+                            cantidadSolicitada
                         };
                         return reservas.create(request);
                     })
