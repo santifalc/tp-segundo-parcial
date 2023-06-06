@@ -25,6 +25,8 @@ db.posicion = require("./posicion.model")(sequelize, Sequelize);
 db.reserva = require("./reserva.model")(sequelize, Sequelize);
 db.categorias = require("./categorias.model")(sequelize, Sequelize);
 db.productos = require("./productos.model")(sequelize, Sequelize);
+db.consumoCabecera = require("./consumoCabecera.model")(sequelize, Sequelize);
+db.detalleConsumo = require("./detalleConsumo.model")(sequelize, Sequelize);
 
 //Se agregan las relaciones necesarias para la base de datos
 db.restaurante.hasMany(db.mesa, { as: "mesas" });
@@ -34,6 +36,7 @@ db.restaurante.hasOne(db.reserva, { as: "restaurante" });
 db.mesa.hasMany(db.reserva, { as: "mesas" });
 db.posicion.hasOne(db.mesa, { as: "posicion" });
 db.categorias.hasOne(db.productos, { as: "categorias" });
+db.consumoCabecera.hasOne(db.detalleConsumo, { as: "consumo_cabecera" });
 
 //Se agregan las claves foráneas a las tablas (no hace falta xd)
 // db.mesa.belongsTo(db.restaurante, {
