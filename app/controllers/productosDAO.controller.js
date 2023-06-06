@@ -3,7 +3,7 @@ const productos = db.productos;
 const Op = db.Sequelize.Op;
 exports.create = (req, res) => {
 // Validate request
-    if (!req.body.nombre || !req.body.idCategoria || !req.body.precio) {
+    if (!req.body.nombre || !req.body.categoriaId || !req.body.precio) {
         res.status(400).send({
             message: "Debe completar todos los datos!"
         });
@@ -12,7 +12,7 @@ exports.create = (req, res) => {
 
     const request = {
         nombre: req.body.nombre,
-        categoriumId: req.body.idCategoria,
+        categoriaId: req.body.categoriaId,
         precio: req.body.precio
     };
 // Guardamos a la base de datos
@@ -53,7 +53,7 @@ exports.update = (req, res) => {
 
     const request = {
         nombre: req.body.nombre,
-        idCategoria: req.body.idCategoria,
+        categoriaId: req.body.categoriaId,
         precio: req.body.precio
     };
 
@@ -88,7 +88,7 @@ exports.eliminar = (req, res) => {
 
     const id = req.params.id;
 
-    categorias
+    productos
         .destroy({ where: { id } })
         .then((numRowsAffected) => {
             if (numRowsAffected == 1) {

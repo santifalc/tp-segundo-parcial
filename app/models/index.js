@@ -33,16 +33,16 @@ db.cliente.hasOne(db.reserva, { as: "cliente" });
 db.restaurante.hasOne(db.reserva, { as: "restaurante" });
 db.mesa.hasMany(db.reserva, { as: "mesas" });
 db.posicion.hasOne(db.mesa, { as: "posicion" });
-db.categorias.hasOne(db.productos, { as: "categoria" });
+db.categorias.hasOne(db.productos, { as: "categorias" });
 
 //Se agregan las claves foráneas a las tablas (no hace falta xd)
 // db.mesa.belongsTo(db.restaurante, {
 //   foreignKey: "restauranteId",
 //   as: "restauranteAssociation",
 // });
-// db.posicion.belongsTo(db.mesa, {
-//   foreignKey: "posicionId",
-//   as: "posicionAsociacion",
+// db.productos.belongsTo(db.categorias, {
+//   foreignKey: "categoriaId",
+//   as: "idCategoria",
 // });
 
 // db.reserva.belongsTo(db.restaurante, { foreignKey: 'restauranteId', as: 'idRestaurante' });
