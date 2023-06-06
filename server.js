@@ -24,6 +24,7 @@ require("./app/routes/restaurante.routes")(app);
 require("./app/routes/cliente.routes")(app);
 require("./app/routes/reserva.routes")(app);
 require("./app/routes/categorias.routes")(app);
+require("./app/routes/productos.routes")(app);
 app.listen(PORT, () => {
     console.log('Servidor corriendo en puerto 9090.');
 });

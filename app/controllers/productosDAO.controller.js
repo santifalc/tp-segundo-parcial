@@ -1,9 +1,9 @@
 const db = require("../models");
-const categorias = db.categorias;
+const productos = db.productos;
 const Op = db.Sequelize.Op;
 exports.create = (req, res) => {
 // Validate request
-    if (!req.body.nombre) {
+    if (!req.body.nombre || !req.body.idCategoria || !req.body.precio) {
         res.status(400).send({
             message: "Debe completar todos los datos!"
         });
@@ -11,30 +11,32 @@ exports.create = (req, res) => {
     }
 
     const request = {
-        nombre: req.body.nombre
+        nombre: req.body.nombre,
+        categoriumId: req.body.idCategoria,
+        precio: req.body.precio
     };
 // Guardamos a la base de datos
-    categorias.create(request)
+    productos.create(request)
         .then(data => {
             res.send(data);
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Ha ocurrido un error al crear la categoría."
+                    err.message || "Ha ocurrido un error al crear el producto."
             });
         });
 };
 
 exports.findAll = (req, res) => {
-    categorias.findAll()
+    productos.findAll()
         .then(data => {
             res.send(data);
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Ocurrio un error al obtener las categorías."
+                    err.message || "Ocurrio un error al obtener los productos."
             });
         });
 };
@@ -43,32 +45,34 @@ exports.update = (req, res) => {
     // Validate request
     if (!req.params.id) {
         res.status(400).send({
-            message: "Debe seleccionar una categoría!",
+            message: "Debe seleccionar un producto!",
         });
         return;
     }
     const id = req.params.id;
 
     const request = {
-        nombre: req.body.nombre
+        nombre: req.body.nombre,
+        idCategoria: req.body.idCategoria,
+        precio: req.body.precio
     };
 
-    categorias
+    productos
         .update(request, {where: {id}})
         .then((numRowsAffected) => {
             if (numRowsAffected == 1) {
                 res.send({
-                    message: "Categoría actualizada correctamente.",
+                    message: "Producto actualizado correctamente.",
                 });
             } else {
                 res.status(404).send({
-                    message: `No se pudo actualizar la categoría con id=${id}.`,
+                    message: `No se pudo actualizar el producto con id=${id}.`,
                 });
             }
         })
         .catch((err) => {
             res.status(500).send({
-                message: `Error al actualizar la categoría con id=${id}.`,
+                message: `Error al actualizar el producto con id=${id}.`,
             });
         });
 };
@@ -77,7 +81,7 @@ exports.eliminar = (req, res) => {
     // Validate request
     if (!req.params.id) {
         res.status(400).send({
-            message: "Debe seleccionar una categoría!",
+            message: "Debe seleccionar un producto!",
         });
         return;
     }
@@ -89,17 +93,17 @@ exports.eliminar = (req, res) => {
         .then((numRowsAffected) => {
             if (numRowsAffected == 1) {
                 res.send({
-                    message: "Categoría eliminada correctamente.",
+                    message: "Producto eliminado correctamente.",
                 });
             } else {
                 res.status(404).send({
-                    message: `No se pudo eliminar la categoría con id=${id}.`,
+                    message: `No se pudo eliminar el producto con id=${id}.`,
                 });
             }
         })
         .catch((err) => {
             res.status(500).send({
-                message: `Error al eliminar la categoría con id=${id}.`,
+                message: `Error al eliminar el producto con id=${id}.`,
             });
         });
 };

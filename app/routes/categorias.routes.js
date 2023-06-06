@@ -1,4 +1,3 @@
-const rest = require("../controllers/restauranteDAO.controller");
 module.exports = app => {
 const categoria = require("../controllers/categoriasDAO.controller");
     var router = require("express").Router();
