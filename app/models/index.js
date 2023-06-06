@@ -23,6 +23,7 @@ db.restaurante = require("./restaurante.model")(sequelize, Sequelize);
 db.mesa = require("./mesa.model")(sequelize, Sequelize);
 db.posicion = require("./posicion.model")(sequelize, Sequelize);
 db.reserva = require("./reserva.model")(sequelize, Sequelize);
+db.categorias = require("./categorias.model")(sequelize, Sequelize);
 
 //Se agregan las relaciones necesarias para la base de datos
 db.restaurante.hasMany(db.mesa, { as: "mesas" });
