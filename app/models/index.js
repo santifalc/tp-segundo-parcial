@@ -36,7 +36,7 @@ db.restaurante.hasOne(db.reserva, { as: "restaurante" });
 db.mesa.hasMany(db.reserva, { as: "mesas" });
 db.posicion.hasOne(db.mesa, { as: "posicion" });
 db.categorias.hasOne(db.productos, { as: "categorias" });
-db.consumoCabecera.hasOne(db.detalleConsumo, { as: "consumo_cabecera" });
+db.consumoCabecera.hasMany(db.detalleConsumo, { as: "consumo_cabecera" });
 
 //Se agregan las claves foráneas a las tablas (no hace falta xd)
 // db.mesa.belongsTo(db.restaurante, {
