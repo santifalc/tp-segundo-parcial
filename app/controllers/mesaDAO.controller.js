@@ -4,7 +4,13 @@ const sequelize = db.sequelize;
 const Op = db.Sequelize.Op;
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.nombre || !req.body.planta || !req.body.capacidad || !req.body.restauranteId) {
+  console.log(req.body);
+  if (
+    !req.body.nombre ||
+    !req.body.planta ||
+    !req.body.capacidad ||
+    !req.body.restauranteId
+  ) {
     res.status(400).send({
       message: "Debe completar los campos!",
     });
