@@ -18,6 +18,7 @@ module.exports = (sequelize, Sequelize) => {
     },
     total: {
       type: Sequelize.BIGINT,
+      defaultValue: 0,
     },
   });
   return ConsumoCabecera;
