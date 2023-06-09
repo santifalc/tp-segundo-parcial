@@ -1,5 +1,5 @@
 const db = require("../models");
-const PDFDocument = require("pdfkit");
+// const PDFDocument = require("pdfkit");
 const { datosDetalleConsumo } = require("./detalleConsumoDAO.controller");
 const consumos = db.consumoCabecera;
 const reserva = db.reserva;
@@ -8,6 +8,7 @@ const cliente = db.cliente;
 const restaurante = db.restaurante;
 const sequelize = db.sequelize;
 const Op = db.Sequelize.Op;
+const { PDFDocument, StandardFonts, rgb } = require ('pdf-lib')
 exports.create = async (req, res) => {
   const { mesaId, restauranteConsumoId, clienteConsumoCedula } = req.body;
   if (!mesaId || !restauranteConsumoId || !clienteConsumoCedula) {
@@ -152,8 +153,13 @@ exports.cerrarConsumo = async (req, res) => {
         res.setHeader("Content-Type", "application/pdf");
         pdf.pipe(res);
         pdf.end();*/
+        let pdf = await createPdf(datos_consumo);
+        const data = {
+          datos_consumo: datos_consumo,
+          pdf: pdf
+        }
 
-        return res.send(datos_consumo);
+        return res.send(data);
       } else {
         throw new Error("No hay datos suficientes");
       }
@@ -178,36 +184,6 @@ exports.datosConsumoCabecera = async (consumo_cabecera_id) => {
   return datos_consumo_cabecera;
 };
 
-function generarPDF(datos_consumo, res) {
-  const { cabecera, cliente, detalles, total } = datos_consumo;
-
-  const pdf = new PDFDocument();
-
-  res.setHeader(
-    "Content-Disposition",
-    `attachment; filename=ticket${cabecera.id}.pdf`
-  );
-  res.setHeader("Content-Type", "application/pdf");
-
-  pdf.pipe(res);
-
-  pdf.text(`Nombre: ${cliente.nombre} ${cliente.apellido}`);
-  pdf.text(`CI: ${cliente.cedula}`);
-  pdf.text(`Fecha de creación: ${cabecera.fechaHoraCreacion}`);
-  pdf.text(`Fecha de cierre: ${cabecera.fechaHoraCierre}`);
-  pdf.text("Detalles:");
-  detalles.forEach((detalle) => {
-    pdf.text(
-      `- Producto ID: ${detalle.productoId}, Cantidad: ${detalle.cantidad}`
-    );
-  });
-  pdf.text(`Total: ${total}`, { align: "right" });
-
-  pdf.end();
-
-  return pdf;
-}
-
 exports.obtenerConsumo = async (req, res) => {
   const mesaId = req.body.mesaId;
   const data = {};
@@ -226,3 +202,46 @@ exports.obtenerConsumo = async (req, res) => {
     return res.send(data);
   } else return res.send(null);
 };
+
+async function createPdf(datos_consumo) {
+  const pdfDoc = await PDFDocument.create()
+  const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman)
+
+  const page = pdfDoc.addPage()
+  const { width, height } = page.getSize()
+  const fontSize = 18
+
+  const fechaHoraCierre = new Date(datos_consumo.cabecera.fechaHoraCierre);
+  const dia = fechaHoraCierre.getDate();
+  const mes = fechaHoraCierre.getMonth() + 1; // Los meses en JavaScript comienzan desde 0
+  const anio = fechaHoraCierre.getFullYear();
+  const hora = fechaHoraCierre.getHours();
+  const minutos = fechaHoraCierre.getMinutes();
+  const segundos = fechaHoraCierre.getSeconds();
+
+// Formatear los componentes en formato deseado
+  const fechaHoraFormateada = `${dia < 10 ? '0' + dia : dia}-${mes < 10 ? '0' + mes : mes}-${anio} ${hora < 10 ? '0' + hora : hora}:${minutos < 10 ? '0' + minutos : minutos}:${segundos < 10 ? '0' + segundos : segundos}`;
+
+
+  let detallesText = '';
+  for (const detalle of datos_consumo.detalles) {
+    const productoId = detalle.productoId;
+    const cantidad = detalle.cantidad;
+    detallesText += `Producto ID: ${productoId}, Cantidad: ${cantidad}\n`;
+  }
+
+  page.drawText(`\nNombre: ${datos_consumo.cliente.nombre}\n 
+  Fecha: ${fechaHoraFormateada} \n
+  Detalles:\n ${detallesText}\n
+  Total: ${datos_consumo.total}`, {
+    x: 50,
+    y: height - 4 * fontSize,
+    size: fontSize,
+    font: timesRomanFont,
+    color: rgb(0, 0, 0),
+  })
+
+  const pdfBytes = await pdfDoc.saveAsBase64();
+
+  return pdfBytes;
+}
