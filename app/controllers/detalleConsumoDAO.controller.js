@@ -1,5 +1,4 @@
 const db = require("../models");
-const { datosConsumoCabecera } = require("./consumoCabeceraDAO.controller");
 const detalles = db.detalleConsumo;
 const producto = db.productos;
 const consumo_cabecera = db.consumoCabecera;
@@ -68,7 +67,7 @@ exports.create = async (req, res) => {
 exports.findAllByConsumo = async (req, res) => {
   const consumo_cabecera_id = req.params.consumoCabeceraId;
   try {
-    const datos_consumo_cabecera = await datosConsumoCabecera(
+    const datos_consumo_cabecera = await this.datosConsumoCabecera(
       consumo_cabecera_id
     );
     if (!datos_consumo_cabecera) {
@@ -97,4 +96,14 @@ exports.datosDetalleConsumo = async (consumo_cabecera_id) => {
   });
 
   return datos_detalle_consumo;
+};
+
+exports.datosConsumoCabecera = async (consumo_cabecera_id) => {
+  if (!consumo_cabecera_id) {
+    return;
+  }
+  const datos_consumo_cabecera = await db.consumoCabecera.findOne({
+    where: { id: consumo_cabecera_id },
+  });
+  return datos_consumo_cabecera;
 };
