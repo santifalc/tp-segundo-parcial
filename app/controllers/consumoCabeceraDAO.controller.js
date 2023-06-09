@@ -227,7 +227,10 @@ async function createPdf(datos_consumo) {
   for (const detalle of datos_consumo.detalles) {
     const productoId = detalle.productoId;
     const cantidad = detalle.cantidad;
-    detallesText += `Producto ID: ${productoId}, Cantidad: ${cantidad}\n`;
+    const producto = await db.productos.findOne({
+      where: { id: detalle.productoId },
+    });
+    detallesText += `Producto: ${productoId} - ${producto.nombre},  Cantidad: ${cantidad}\n`;
   }
 
   page.drawText(`\nNombre: ${datos_consumo.cliente.nombre}\n 

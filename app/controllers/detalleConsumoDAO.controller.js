@@ -95,6 +95,13 @@ exports.datosDetalleConsumo = async (consumo_cabecera_id) => {
     where: { consumoCabeceraId: consumo_cabecera_id },
   });
 
+  for (const detalle of datos_detalle_consumo) {
+    const producto = await db.productos.findOne({
+      where: { id: detalle.productoId },
+    });
+    detalle.dataValues.nombreProducto = producto.nombre;
+  }
+
   return datos_detalle_consumo;
 };
 
