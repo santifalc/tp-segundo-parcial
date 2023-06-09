@@ -161,6 +161,7 @@ exports.findAllByRestaurant = (req, res) => {
           "mesa"."updatedAt",
           "mesa"."restauranteId",
           "mesa"."posicionId",
+          "mesa"."ocupado",
           "posicion"."x", "posicion"."y"
           FROM "mesas" AS "mesa"
                    JOIN "posicion_mesas" AS "posicion" ON "mesa"."posicionId" = "posicion"."id"

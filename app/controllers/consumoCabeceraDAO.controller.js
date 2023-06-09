@@ -102,8 +102,12 @@ exports.cerrarConsumo = async (req, res) => {
     );
 
     if (numRowsAffected == 1) {
-      const { fechaHoraCreacion, fechaHoraCierre, clienteConsumoCedula } =
-        await this.datosConsumoCabecera(id);
+      const {
+        fechaHoraCreacion,
+        fechaHoraCierre,
+        clienteConsumoCedula,
+        mesaId,
+      } = await this.datosConsumoCabecera(id);
 
       const datos_cliente = await db.cliente.findOne({
         where: { cedula: clienteConsumoCedula },
@@ -123,6 +127,7 @@ exports.cerrarConsumo = async (req, res) => {
       const precios = await Promise.all(totalPromises);
       const total = precios.reduce((acc, precio) => acc + precio, 0);
 
+      await db.mesa.update({ ocupado: false }, { where: { id: mesaId } });
       await consumos.update({ total }, { where: { id } });
 
       if (datos_cliente && datos_detalles && total) {
@@ -219,7 +224,5 @@ exports.obtenerConsumo = async (req, res) => {
     data.cabecera = datos_consumo_cabecera;
 
     return res.send(data);
-  } else {
-    return;
-  }
+  } else return res.send(null);
 };
